@@ -12,7 +12,6 @@
   "devDependencies": {
     "cds-plugin-ui5": "^0.2.2",
     "rimraf": "^5.0.1",
-    "ui5-cap-event-app-ui-admin": "*",
     "ui5-cap-event-app-ui-form": "*"
   },
   "scripts": {

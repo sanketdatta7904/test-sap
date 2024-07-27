@@ -9,61 +9,72 @@
 			<Bar>
 				<contentLeft>
 					<!-- <Image src="img/logo.png" height="32px" /> -->
-					<Label text="{i18n>pageHeaderTitle}" class="sapUiMediumMarginBegin" wrapping="true"/>
-					<!-- wrapping helps with keeping at least parts of the title visible on very small screens -->
+					<Label text="{i18n>pageHeaderTitle}" class="sapUiMediumMarginBegin"
+						wrapping="true" />
+					<!-- wrapping helps with keeping at least parts of the title visible on very
+					small screens -->
 				</contentLeft>
 			</Bar>
 		</customHeader>
 
-		<f:Form editable="true" class="sapUiResponsiveMargin">
+		<f:Form id="sapForm" editable="true" class="sapUiResponsiveMargin">
 			<f:toolbar>
 				<Toolbar>
 					<Title text="{i18n>registrationViewTitle}" />
 				</Toolbar>
 			</f:toolbar>
 			<f:layout>
-				<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="3" emptySpanL="3" emptySpanM="1" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="true" />
+				<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="4"
+					labelSpanS="12" adjustLabelSpan="false" emptySpanXL="3" emptySpanL="3"
+					emptySpanM="1" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+					singleContainerFullSize="true" />
 			</f:layout>
 			<f:formContainers>
 				<f:FormContainer title="{i18n>personalData}">
 					<f:formElements>
 						<f:FormElement label="{i18n>productName}">
-						<f:fields>
-							<Input required="true" value="{
+							<f:fields>
+								<Input required="true"
+									value="{
 							path: 'Name',
 							type: 'sap.ui.model.type.String'
-							}" maxLength="100" fieldGroupIds="RegForm"/>
-						</f:fields>
-									</f:FormElement>
-									<f:FormElement label="{i18n>productDescription}">
-										<f:fields>
-											<Input id="description" required="true" value="{
+							}"
+									maxLength="100" fieldGroupIds="RegForm" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="{i18n>productDescription}">
+							<f:fields>
+								<Input id="description" required="true"
+									value="{
 												path: 'Description',
 												type: 'sap.ui.model.type.String'
-											}" maxLength="100" fieldGroupIds="RegForm"/>
-										</f:fields>
+											}"
+									maxLength="100" fieldGroupIds="RegForm" />
+							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="{i18n>productOwner}">
-											<f:fields>
-											<Input id="owner" required="true" value="{
+							<f:fields>
+								<Input id="owner" required="true"
+									value="{
 												path: 'Owner',
 												type: 'sap.ui.model.type.String'
-											}" maxLength="100" fieldGroupIds="RegForm"/>
-										</f:fields>
+											}"
+									maxLength="100" fieldGroupIds="RegForm" />
+							</f:fields>
 						</f:FormElement>
-        			</f:formElements>
+					</f:formElements>
 				</f:FormContainer>
 			</f:formContainers>
 		</f:Form>
 
 
 		<Table id="productsTable"
-				class="sapUiResponsiveMargin"
-				width="auto"
-				backgroundDesign="Transparent"
-				inset="false"
-				items="{/Products}"
-				noDataText="{i18n>noProducts}">
+			class="sapUiResponsiveMargin"
+			width="auto"
+			backgroundDesign="Transparent"
+			inset="false"
+			items="{/Products}"
+			noDataText="{i18n>noProducts}">
 			<headerToolbar>
 				<Toolbar>
 					<Title text="{i18n>products}" />
@@ -71,13 +82,24 @@
 				</Toolbar>
 			</headerToolbar>
 			<columns>
-				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left" popinDisplay="WithoutHeader">
+				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left"
+					popinDisplay="WithoutHeader">
 					<Text text="{i18n>productName}" />
 				</Column>
-				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left" popinDisplay="WithoutHeader">
+				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left"
+					popinDisplay="WithoutHeader">
 					<Text text="{i18n>productDescription}" />
 				</Column>
-				<Column width="6rem" hAlign="End" minScreenWidth="Desktop" demandPopin="true" popinDisplay="WithoutHeader">
+				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left"
+					popinDisplay="WithoutHeader">
+					<Text text="{i18n>productOwner}" />
+				</Column>
+
+				<Column width="6rem" hAlign="End" minScreenWidth="Desktop" demandPopin="true"
+					popinDisplay="WithoutHeader">
+				</Column>
+				<Column width="6rem" hAlign="End" minScreenWidth="Desktop" demandPopin="true"
+					popinDisplay="WithoutHeader">
 				</Column>
 			</columns>
 			<items>
@@ -85,11 +107,21 @@
 					<Text text="{
 						path: 'Name',
 						type: 'sap.ui.model.type.String'
-					}" fieldGroupIds="RegForm"/>
-					<Text text="{
+					}"
+						fieldGroupIds="RegForm" />
+					<Text
+						text="{
 						path: 'Description',
 						type: 'sap.ui.model.type.String'
-					}" fieldGroupIds="RegForm"/>
+					}"
+						fieldGroupIds="RegForm" />
+					<Text
+						text="{
+						path: 'Owner',
+						type: 'sap.ui.model.type.String'
+					}"
+						fieldGroupIds="RegForm" />
+					<Button text="{i18n>edit}" press=".onEditProduct" />
 					<Button text="{i18n>delete}" press=".deleteProduct" />
 				</ColumnListItem>
 			</items>

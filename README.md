@@ -60,9 +60,9 @@ Other projects demonstrating similar use-cases:
  
 ### Task 1: Introduce save functionality
 
-- Add save button to form
-- show saved data from the form in the table
-- enhance the table by column showing owner information
+- Add save button to form     >> Done
+- show saved data from the form in the table    >> Done
+- enhance the table by column showing owner information   >> Done
  
 ### Task 2: Introduce modify functionality
 
