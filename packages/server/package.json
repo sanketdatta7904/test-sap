@@ -1,0 +1,35 @@
+{
+  "name": "ui5-cap-event-app-server",
+  "version": "0.0.0",
+  "description": "A simple CAP-based UI5 Event Application Server.",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^7.1.1",
+    "express": "^4.18.2",
+    "passport": "^0.6.0",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "cds-plugin-ui5": "^0.2.2",
+    "rimraf": "^5.0.1",
+    "ui5-cap-event-app-ui-admin": "*",
+    "ui5-cap-event-app-ui-form": "*"
+  },
+  "scripts": {
+    "clean": "rimraf gen",
+    "build": "cds build",
+    "watch": "cds watch",
+    "start": "cds-serve"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sql",
+        "model": [
+          "db",
+          "srv"
+        ]
+      }
+    }
+  }
+}
