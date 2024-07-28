@@ -10,21 +10,25 @@ sap.ui.define([
 
 	return Controller.extend("sap.ui.marketplace.form.controller.Registration", {
 		formCreateContext: undefined,
-		isEditMode: false, // Flag to determine if the form is in edit mode
 
 		onInit: function () {
+			// keep the reference to the OData model
 			this.oDataModel = this.getOwnerComponent().getModel();
 
+			// load previous data
 			this.prepareForm();
 		},
 
 		prepareForm: function () {
+			// if binding context is not created
 			if (!this.formCreateContext) {
-				console.log("I am prepareForm")
+				// Get list of data products using ODATA model
 				var oListBinding = this.oDataModel.bindList("/Products");
 
+				// Create new binding context
 				this.formCreateContext = oListBinding.create({}, true /* bSkipRefresh */);
 
+				// Attach binding context to the form
 				this.getView().setBindingContext(this.formCreateContext);
 			}
 		},
@@ -32,7 +36,6 @@ sap.ui.define([
 		onEditProduct: function (oEvent) {
 			var oItem = oEvent.getSource().getParent();
 			var oContext = oItem.getBindingContext();
-			this.isEditMode = true;
 			this.getView().setBindingContext(oContext);
 		},
 
@@ -40,29 +43,42 @@ sap.ui.define([
 			// Do Nothing
 		},
 
-		onSubmit: async function () {
-			try {
-				var oContext = this.getView().getBindingContext();
-				var oData = oContext.getObject();
-				console.log("oData>>>>", oData);
+		onSubmit: function () {
+			var oContext = this.getView().getBindingContext();
+			var oData = oContext.getObject();
+			console.log("oData>>>>", oData);
 
-				// if (!oData.Name || !oData.Description || !oData.Owner) {
-				// 	MessageBox.error("Please fill all mandatory fields.");
-				// 	return;
-				// }
-
-				await oContext.getModel().submitBatch(oContext.getModel().getUpdateGroupId());
-				MessageToast.show("Product saved successfully");
-				this.formCreateContext = null;
-				this.prepareForm();
-
-
-				var oTable = this.byId("productsTable");
-				oTable.getBinding("items").refresh();
-			} catch (oError) {
-				MessageBox.error("Error saving product: " + oError.message);
+			if (!oData.Name || !oData.Description || !oData.Owner) {
+				MessageBox.error("Please fill all mandatory fields.");
+				return;
 			}
-		}
 
+			oContext.getModel().submitBatch(oContext.getModel().getUpdateGroupId())
+				.then((res) => {
+					console.log("Response from submitBatch:", res);
+					MessageToast.show("Product saved successfully");
+					this.formCreateContext = null;
+					this.prepareForm();
+
+					var oTable = this.byId("productsTable");
+					oTable.getBinding("items").refresh();
+				})
+				.catch((oError) => {
+					console.log("Error caught:", oError);
+					let sErrorMessage = "Unknown error occurred.";
+
+					if (oError.responseText) {
+						try {
+							const oErrorResponse = JSON.parse(oError.responseText);
+							sErrorMessage = oErrorResponse.error.message.value || sErrorMessage;
+						} catch (e) {
+							sErrorMessage = oError.message || sErrorMessage;
+						}
+					} else {
+						sErrorMessage = oError.message || sErrorMessage;
+					}
+					MessageBox.error("Error saving product: " + sErrorMessage);
+				});
+		}
 	});
 });

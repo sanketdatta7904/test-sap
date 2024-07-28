@@ -66,16 +66,16 @@ Other projects demonstrating similar use-cases:
  
 ### Task 2: Introduce modify functionality
 
-- introduce edit button next to delete button in table, that populates form with data from table row
-- upon clicking save button, update the row in the table
+- introduce edit button next to delete button in table, that populates form with data from table row  >> Done
+- upon clicking save button, update the row in the table  >> Not done(One extra record getting added)
  
 ### Task 3: Introduce frontend-backend validation
 
-- enhance the form with validation:
-- a product name should be unique
-- show error message when a validation fails
-- hint: add the validation in the backend - marketplace-service.js
+- enhance the form with validation:    >> Done
+- a product name should be unique      >> Done
+- show error message when a validation fails    >> Not done
+- hint: add the validation in the backend - marketplace-service.js    >> Done
  
 ### Task 4: Add unit tests
 
-- write a unit test using the tool of your choice to test the validation implementation
+- write a unit test using the tool of your choice to test the validation implementation   >>  Done

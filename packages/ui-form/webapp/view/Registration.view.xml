@@ -62,6 +62,17 @@
 									maxLength="100" fieldGroupIds="RegForm" />
 							</f:fields>
 						</f:FormElement>
+						<f:FormElement label="{i18n>Submit}">
+							<f:fields>
+								<Button id="submitButton" text="{i18n>save}" press="onSubmit"
+									type="Emphasized">
+									<layoutData>
+										<l:GridData span="L1 M1 S1" />
+									</layoutData>
+								</Button>
+							</f:fields>
+						</f:FormElement>
+
 					</f:formElements>
 				</f:FormContainer>
 			</f:formContainers>
@@ -104,7 +115,8 @@
 			</columns>
 			<items>
 				<ColumnListItem>
-					<Text text="{
+					<Text
+						text="{
 						path: 'Name',
 						type: 'sap.ui.model.type.String'
 					}"
@@ -127,14 +139,6 @@
 			</items>
 		</Table>
 
-		<footer>
-			<OverflowToolbar>
-				<content>
-					<ToolbarSpacer />
-					<Button id="submitButton" text="{i18n>save}" press="onSubmit" type="Emphasized" />
-				</content>
-			</OverflowToolbar>
-		</footer>
 	</Page>
 
 </mvc:View>
