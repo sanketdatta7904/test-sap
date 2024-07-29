@@ -2,23 +2,22 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
-	"sap/m/InputBase",
-	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator"
-], function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperator) {
+	"sap/ui/model/json/JSONModel"
+], function (Controller, MessageBox, MessageToast, JSONModel) {
 	"use strict";
 
 	return Controller.extend("sap.ui.marketplace.form.controller.Registration", {
 		formCreateContext: undefined,
-
 		onInit: function () {
-			// keep the reference to the OData model
 			this.oDataModel = this.getOwnerComponent().getModel();
-
-			// load previous data
-			this.prepareForm();
+			this.localModel = new JSONModel({
+				Name: "",
+				Description: "",
+				Owner: ""
+			});
+			this.getView().setModel(this.localModel, "local");
+			this.isEditMode = false;
 		},
-
 		prepareForm: function () {
 			// if binding context is not created
 			if (!this.formCreateContext) {
@@ -34,51 +33,68 @@ sap.ui.define([
 		},
 
 		onEditProduct: function (oEvent) {
-			var oItem = oEvent.getSource().getParent();
-			var oContext = oItem.getBindingContext();
+			var oContext = oEvent.getSource().getParent().getBindingContext();
+			this.localModel.setData(oContext.getObject());
 			this.getView().setBindingContext(oContext);
+			this.isEditMode = true;
+		},
+
+		onNameInputLiveChange: function (oEvent) {
+			this.localModel.setProperty("/Name", oEvent.getParameter("value"));
+		},
+
+		onDescriptionInputLiveChange: function (oEvent) {
+			this.localModel.setProperty("/Description", oEvent.getParameter("value"));
+		},
+
+		onOwnerInputLiveChange: function (oEvent) {
+			this.localModel.setProperty("/Owner", oEvent.getParameter("value"));
 		},
 
 		deleteProduct: function (oEvent) {
 			// Do Nothing
 		},
 
-		onSubmit: function () {
-			var oContext = this.getView().getBindingContext();
-			var oData = oContext.getObject();
-			console.log("oData>>>>", oData);
+		onSubmit: async function () {
+			try {
+				var oData = this.localModel.getData();
 
-			if (!oData.Name || !oData.Description || !oData.Owner) {
-				MessageBox.error("Please fill all mandatory fields.");
-				return;
+				if (!oData.Name || !oData.Description || !oData.Owner) {
+					MessageBox.error("Please fill all mandatory fields.");
+					return;
+				}
+
+				if (this.isEditMode) {
+					var oContext = this.getView().getBindingContext();
+					oContext.setProperty("Name", oData.Name);
+					oContext.setProperty("Description", oData.Description);
+					oContext.setProperty("Owner", oData.Owner);
+				} else {
+					var oListBinding = this.oDataModel.bindList("/Products", undefined, undefined, undefined, { $count: true });
+					oListBinding.create(oData, true, { groupId: "create" });
+
+				}
+
+				await this.oDataModel.submitBatch("update")
+
+				MessageToast.show(this.isEditMode ? "Product updated successfully" : "Product created successfully");
+				this.resetForm();
+
+
+				var oTable = this.byId("productsTable");
+				oTable.getBinding("items").refresh();
+			} catch (oError) {
+				MessageBox.error("Error saving product: " + oError.message);
 			}
-
-			oContext.getModel().submitBatch(oContext.getModel().getUpdateGroupId())
-				.then((res) => {
-					console.log("Response from submitBatch:", res);
-					MessageToast.show("Product saved successfully");
-					this.formCreateContext = null;
-					this.prepareForm();
-
-					var oTable = this.byId("productsTable");
-					oTable.getBinding("items").refresh();
-				})
-				.catch((oError) => {
-					console.log("Error caught:", oError);
-					let sErrorMessage = "Unknown error occurred.";
-
-					if (oError.responseText) {
-						try {
-							const oErrorResponse = JSON.parse(oError.responseText);
-							sErrorMessage = oErrorResponse.error.message.value || sErrorMessage;
-						} catch (e) {
-							sErrorMessage = oError.message || sErrorMessage;
-						}
-					} else {
-						sErrorMessage = oError.message || sErrorMessage;
-					}
-					MessageBox.error("Error saving product: " + sErrorMessage);
-				});
+		},
+		resetForm: function () {
+			this.getView().setBindingContext(null);
+			this.localModel.setData({
+				Name: "",
+				Description: "",
+				Owner: ""
+			});
+			this.isEditMode = false;
 		}
 	});
 });

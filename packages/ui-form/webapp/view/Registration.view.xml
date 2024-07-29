@@ -38,7 +38,7 @@
 									value="{
 							path: 'Name',
 							type: 'sap.ui.model.type.String'
-							}"
+							}" liveChange="onNameInputLiveChange"
 									maxLength="100" fieldGroupIds="RegForm" />
 							</f:fields>
 						</f:FormElement>
@@ -49,6 +49,7 @@
 												path: 'Description',
 												type: 'sap.ui.model.type.String'
 											}"
+											liveChange="onDescriptionInputLiveChange"
 									maxLength="100" fieldGroupIds="RegForm" />
 							</f:fields>
 						</f:FormElement>
@@ -59,6 +60,7 @@
 												path: 'Owner',
 												type: 'sap.ui.model.type.String'
 											}"
+											liveChange="onOwnerInputLiveChange"
 									maxLength="100" fieldGroupIds="RegForm" />
 							</f:fields>
 						</f:FormElement>
